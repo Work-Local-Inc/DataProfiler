@@ -1,0 +1,124 @@
+# Replit Agent v3 Configuration
+# Optimized for TypeScript Node.js deployment
+
+# Main run command
+run = "npm start"
+
+# Development command  
+[packager]
+language = "nodejs"
+
+[packager.features]
+enabledForHosting = true
+packageSearch = true
+guessImports = true
+
+# Language configuration
+[languages]
+
+[languages.typescript]
+pattern = "**/{*.ts,*.tsx,*.mts,*.cts}"
+[languages.typescript.languageServer]
+start = "typescript-language-server --stdio"
+
+[languages.javascript]
+pattern = "**/{*.js,*.jsx,*.mjs,*.cjs}"
+[languages.javascript.languageServer]
+start = "typescript-language-server --stdio"
+
+# Nix configuration
+[nix]
+channel = "stable-24_05"
+
+# Compilation setup for TypeScript
+compile = ["npm", "run", "build"]
+
+# Development server
+[dev]
+run = "npm run dev"
+
+# Deployment configuration
+[deployment]
+deploymentTarget = "gce"
+build = ["npm", "ci", "--production=false"]
+run = ["npm", "run", "start"]
+ignorePorts = false
+
+# Port configuration
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[[ports]]
+localPort = 3001
+externalPort = 3001
+
+# Environment variables
+[env]
+NODE_ENV = "production"
+PORT = "3000"
+NPM_CONFIG_LOGLEVEL = "error"
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+
+# Unit testing
+[unitTest]
+language = "nodejs"
+run = ["npm", "test"]
+
+# Debugger
+[debugger]
+support = true
+
+[debugger.interactive]
+transport = "localhost:0"
+startCommand = ["dap-node"]
+
+[debugger.interactive.integratedAdapter]
+dapTcpAddress = "localhost:0"
+
+[debugger.interactive.initializeMessage]
+command = "initialize"
+type = "request"
+
+[debugger.interactive.initializeMessage.arguments]
+clientID = "replit"
+clientName = "replit.com"
+columnsStartAt1 = true
+linesStartAt1 = true
+locale = "en-us"
+supportsInvalidatedEvent = true
+supportsProgressReporting = true
+supportsRunInTerminalRequest = true
+supportsVariablePaging = true
+supportsVariableType = true
+
+[debugger.interactive.launchMessage]
+command = "launch"
+type = "request"
+
+[debugger.interactive.launchMessage.arguments]
+console = "externalTerminal"
+cwd = "."
+pauseForSourceMap = false
+program = "./dist/server.js"
+request = "launch"
+sourceMaps = true
+stopOnEntry = false
+type = "pwa-node"
+
+# File handling
+[gitHubImport]
+requiredFiles = [".replit", "replit.nix", "package.json", "tsconfig.json"]
+
+# Prettier formatter config
+[formatter.prettier]
+command = ["npx", "prettier", "--write"]
+
+# Additional services
+[[services]]
+name = "MongoDB"
+plan = "free"
+
+[[services]]
+name = "Redis"
+plan = "free"
